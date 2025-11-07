@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* Remove all default browser spacing */
+* {
+  box-sizing: border-box;
+}
+
