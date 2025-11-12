@@ -1,7 +1,9 @@
 import Image from "next/image";
+//hello
 export default function Body() {
   return (
     <>
+    
       <div className="flex item-center justify-center text-center font-bold text-xl sm:text-3xl mt-16 ">
         <span className="">How is the sky looking today?</span>
       </div>
