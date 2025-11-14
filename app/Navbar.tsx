@@ -1,7 +1,9 @@
-"use client"
+"use client";
 import Image from "next/image";
 
 export default function Navbar() {
+
+
   return (
     <>
       <div className=" flex items-center justify-between ">
@@ -14,7 +16,11 @@ export default function Navbar() {
           width={150}
         />
 
-        <div className="flex text-lg  rounded-md items-center  justify-between gap-3.5 h-10 px-4 bg-[hsl(243,27%,20%)]">
+        <div
+          onClick={() => {
+          }}
+          className=" flex text-lg  rounded-md items-center  justify-between gap-3.5 h-10 px-4 bg-[hsl(243,27%,20%)]"
+        >
           <Image
             src="/images/icon-units.svg"
             alt="setting"

@@ -1,5 +1,5 @@
 import Image from "next/image";
-//hello
+
 export default function Body() {
   return (
     <>
