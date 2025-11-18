@@ -3,10 +3,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Bricolage_Grotesque } from "next/font/google";
 
-
 const brico = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: ["700"],
+  weight: ["200", "400", "500", "700"],
 });
 
 export const metadata: Metadata = {

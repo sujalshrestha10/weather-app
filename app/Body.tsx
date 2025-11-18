@@ -159,7 +159,7 @@ export default function Body() {
             </div>
           </div>
         </div>
-        <div className=" w-[70%] mx-auto grid gap-4  rounded-2xl px-5 py-5 bg-[hsl(243,27%,20%)]">
+        <div className=" border w-[60%] sm:w-[60%] md:w-[30%]  mx-auto grid gap-4  rounded-2xl px-5 py-5 bg-[hsl(243,27%,20%)]">
           <div className="flex justify-between items-center ">
             <h2>Hourly forecast</h2>
             <div className="flex justify-between gap-2  items-center text-xs rounded-md bg-[hsl(243,23%,24%)] h-7 w-23 px-3">
