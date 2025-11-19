@@ -1,9 +1,14 @@
+"use client";
 import Image from "next/image";
 
+import { useState } from "react";
+
 export default function Body() {
+  const [thatday, setThatday] = useState("Tuesday");
+  const [daysoption, setDaysoption] = useState(false);
+
   return (
     <>
-    
       <div className="flex item-center justify-center text-center font-bold text-xl sm:text-3xl mt-16 ">
         <span className="">How is the sky looking today?</span>
       </div>
@@ -159,17 +164,49 @@ export default function Body() {
             </div>
           </div>
         </div>
-        <div className=" border w-[60%] sm:w-[60%] md:w-[30%]  mx-auto grid gap-4  rounded-2xl px-5 py-5 bg-[hsl(243,27%,20%)]">
+        <div className=" w-[60%] sm:w-[60%] md:w-[30%]  border mx-auto grid gap-4  rounded-2xl px-5 py-5 bg-[hsl(243,27%,20%)]">
           <div className="flex justify-between items-center ">
             <h2>Hourly forecast</h2>
-            <div className="flex justify-between gap-2  items-center text-xs rounded-md bg-[hsl(243,23%,24%)] h-7 w-23 px-3">
-              <p className="">Tuesday</p>
+            <div
+              onClick={() => setDaysoption((prev) => !prev)}
+              onMouseOver={() => setDaysoption(true)}
+              onMouseLeave={() => setDaysoption(false)}
+              className="flex cursor-pointer justify-between gap-2 relative items-center text-xs rounded-md bg-[hsl(243,23%,24%)] h-7 w-23 px-3"
+            >
+              <p className="">{thatday}</p>
               <Image
                 src="/images/icon-dropdown.svg"
                 width={30}
                 height={30}
                 alt="dropdown"
               />
+              {daysoption && (
+                <div
+                  onMouseLeave={() => setDaysoption(false)}
+                  className="absolute cursor-pointer rounded-sm right-0 px-1.5 py-1.5 flex flex-col  bg-[hsl(243,23%,20%)] top-7 border border-white/10 w-50 text-lg"
+                >
+                  {[
+                    "Sunday",
+                    "Monday",
+                    "Tuesday",
+
+                    "Wednesday",
+                    "Thrusday",
+                    "Friday",
+                    "Saturday",
+                  ].map((days) => (
+                    <p
+                      className="rounded-sm hover:bg-[hsl(243,23%,60%)] top px-1.5 h-12 flex items-center"
+                      key={days}
+                      onClick={() => {
+                        setThatday(days);
+                      }}
+                    >
+                      {days}
+                    </p>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           <div className=" px-4 flex items-center rounded bg-[hsl(243,23%,30%)]">
