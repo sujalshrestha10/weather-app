@@ -1,8 +1,12 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import {  useState } from "react";
 export default function Navbar() {
   const [option, setOption] = useState(false);
+  const [check, setCheck] = useState("Celsius");
+  const [windSpeed, setwindSpeed] = useState("km/hr");
+  const [precipitation, setPrecipitation] = useState("Millimeters (mm)");
+
   return (
     <>
       <div className=" flex  items-center  justify-between ">
@@ -15,7 +19,7 @@ export default function Navbar() {
           width={150}
         />
         <div
-          onClick={() => setOption((prev) => !prev)}
+          onClick={() => setOption(true)}
           onMouseEnter={() => setOption(true)}
           onMouseOver={() => setOption(true)}
           onMouseLeave={() => setOption(false)}
@@ -37,29 +41,82 @@ export default function Navbar() {
             />
           </div>
           {option && (
-            <div className="border border-white/10   py-1.5 px-1.5 text-sm  rounded-lg absolute w-50 right-0 z-60 top-10 bg-[hsl(243,30%,17%)] ">
+            <div className=" border border-white/10   py-1.5 px-1.5 text-sm  rounded-lg absolute w-50 right-0 z-60 top-10 bg-[hsl(243,30%,17%)] ">
               <p className="rounded-lg  bg-[hsl(243,22%,25%)] flex px-2.5 py-2.5">
                 Switch to Imperial
               </p>
-              <p className="opacity-60 px-2 py-1">Temperature</p>
-              <p className="border rounded-lg bg-[hsl(243,22%,25%)]  flex px-2.5 py-2.5">
-                Celsius(°C)
-              </p>
-              <p className=" px-2.5 py-2.5">Fahrenheit(°F)</p>
-              <p className="opacity-60 px-2 py-2  border-t border-t-gray-200">
+              <p className="opacity-60 px-2 mt-3">Temperature</p>
+              <div className="   flex flex-col">
+                {["Celsius", "Fahrenheit"].map((temp) => (
+                  <div
+                    className=" hover:bg-[hsl(243,22%,25%)] cursor-pointer px-1.5 flex py-2 rounded-md justify-between  hover:opacity-80"
+                    key={temp}
+                    onClick={() => setCheck(temp)}
+                  >
+                    {temp}
+
+                    {temp === check && (
+                      <Image
+                        className="left-0"
+                        src={"/images/icon-checkmark.svg"}
+                        alt=""
+                        height={15}
+                        width={15}
+                      ></Image>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <p className="mt-4 flex opacity-60 px-2 py-2  border-t border-t-gray-200">
                 Wind Speed
               </p>
-              <p className="rounded-lg border bg-[hsl(243,22%,25%)] flex px-2.5 py-2.5">
-                km/h
-              </p>
-              <p className="rounded-lg flex px-2.5 py-2.5">mph</p>
+              <div className="  flex flex-col">
+                {["km/hr", "mph"].map((wind) => (
+                  <div
+                    className=" hover:bg-[hsl(243,22%,25%)] cursor-pointer px-1.5 flex py-2 rounded-md justify-between  hover:opacity-80"
+                    key={wind}
+                    onClick={() => setwindSpeed(wind)}
+                  >
+                    {wind}
+
+                    {wind === windSpeed && (
+                      <Image
+                        className="left-0"
+                        src={"/images/icon-checkmark.svg"}
+                        alt=""
+                        height={15}
+                        width={15}
+                      ></Image>
+                    )}
+                  </div>
+                ))}
+              </div>
+
               <p className="opacity-60 px-2 py-2  border-t border-t-gray-200">
                 Precipitation
               </p>
-              <p className="border rounded-lg  bg-[hsl(243,22%,25%)] flex px-2.5 py-2.5">
-                Millimeters (mm)
-              </p>
-              <p className="rounded-lg  flex px-2.5 py-2.5">inches (in)</p>
+              <div className="  flex flex-col">
+                {["Millimeters (mm)", "mph"].map((preci) => (
+                  <div
+                    className=" hover:bg-[hsl(243,22%,25%)] cursor-pointer px-1.5 flex py-2 rounded-md justify-between  hover:opacity-80"
+                    key={preci}
+                    onClick={() => setPrecipitation(preci)}
+                  >
+                    {preci}
+
+                    {preci === precipitation && (
+                      <Image
+                        className="left-0"
+                        src={"/images/icon-checkmark.svg"}
+                        alt=""
+                        height={15}
+                        width={15}
+                      ></Image>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

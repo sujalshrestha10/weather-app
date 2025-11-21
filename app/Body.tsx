@@ -1,12 +1,32 @@
 "use client";
 import Image from "next/image";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Body() {
   const [thatday, setThatday] = useState("Tuesday");
   const [daysoption, setDaysoption] = useState(false);
+  const [city, setCity] = useState("");
+  const [weathernow, setWeathernow] = useState("");
+  const [weatherunit, setWeatherunit] = useState("");
 
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      async function fetchweathernow() {
+        const res = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m`
+        );
+        const data = await res.json();
+        setWeathernow(data.current.temperature_2m);
+        
+        console.log(data);
+      }
+      fetchweathernow();
+    });
+  }, []);
   return (
     <>
       <div className="flex item-center justify-center text-center font-bold text-xl sm:text-3xl mt-16 ">
@@ -18,6 +38,8 @@ export default function Body() {
             className=" mx-auto  h-full w-full bg-[hsl(243,27%,20%)] rounded-md pl-9"
             type="text"
             placeholder="Search for a place.."
+            onChange={(e) => setCity(e.target.value)}
+            value={city}
           />
           <Image
             className="absolute left-3"
@@ -27,7 +49,7 @@ export default function Body() {
             width={15}
           />
         </div>
-        <button className="h-9 font-bold mx-2 px-5 opacity-90 bg-[hsl(233,67%,56%)] rounded-md">
+        <button className="h-9 font-bold mx-2 cursor-pointer hover:opacity-70 px-5 opacity-90 bg-[hsl(233,67%,56%)] rounded-md">
           Search
         </button>
       </div>
@@ -47,7 +69,7 @@ export default function Body() {
                 width={50}
               />
               <h1 className="text-2xl sm:text-5xl mr-10 sm:mr-0 font-extrabold">
-                20°
+                {weathernow} 
               </h1>
             </div>
           </div>
