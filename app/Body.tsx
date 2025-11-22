@@ -7,7 +7,21 @@ export default function Body() {
   const [thatday, setThatday] = useState("Tuesday");
   const [daysoption, setDaysoption] = useState(false);
   const [city, setCity] = useState("");
-  const [weathernow, setWeathernow] = useState("");
+  const [weathernow, setWeathernow] = useState({
+    temp: "",
+    feelsLike: "",
+    humidity: "",
+    windSpeed: "",
+    precipitation: "",
+  });
+  const today = new Date();
+  const dateString = today.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  console.log(dateString);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(async (position) => {
@@ -16,12 +30,17 @@ export default function Body() {
 
       async function fetchweathernow() {
         const res = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m`
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,apparent_temperature,precipitation`
         );
         const data = await res.json();
-        setWeathernow(data.current.temperature_2m);
-
         console.log(data);
+        setWeathernow({
+          temp: data.current.temperature_2m,
+          feelsLike: data.hourly.apparent_temperature[0],
+          humidity: data.hourly.relative_humidity_2m[0],
+          windSpeed: data.hourly.wind_speed_10m[0],
+          precipitation: data.hourly.precipitation[0],
+        });
       }
       fetchweathernow();
 
@@ -71,7 +90,7 @@ export default function Body() {
           <div className="rounded-2xl px-4 h-44 bg-no-repeat bg-cover items-center bg-center bg-[url('/images/bg-today-large.svg')]  flex justify-between ">
             <div className="">
               <h2 className="font-bold text-2xl">{city}</h2>
-              <p className="opacity-60">Tuesday, Aug 5,2025</p>
+              <p className="opacity-60">{dateString}</p>
             </div>
             <div className="flex justify-between gap-1 sm:gap-4 items-center  ">
               <Image
@@ -81,26 +100,26 @@ export default function Body() {
                 width={50}
               />
               <h1 className="text-2xl sm:text-5xl mr-10 sm:mr-0 font-extrabold">
-                {weathernow}
+                {weathernow.temp}
               </h1>
             </div>
           </div>
           <div className="h-25 flex flex-wrap sm:flex-wrap md:flex-wrap lg:flex:wrap xl:flex-nowrap gap-2  text-sm sm:text-xl  justify-between mt-4 ">
             <div className="auto sm:w-47 bg-[hsl(243,27%,20%)] rounded-2xl flex flex-col  justify-center px-3.5">
               <p>Feels Like</p>
-              <p>64°</p>
+              <p>{weathernow.feelsLike}</p>
             </div>
             <div className="w-auto sm:w-47 rounded-2xl bg-[hsl(243,27%,20%)]  flex flex-col justify-center px-3.5">
               <p>Humidity</p>
-              <p>46%</p>
+              <p>{weathernow.humidity}%</p>
             </div>
             <div className="w-auto sm:w-47 rounded-2xl bg-[hsl(243,27%,20%)] flex flex-col justify-center px-3.5">
               <p>wind</p>
-              <p>9 mph</p>
+              <p>{weathernow.windSpeed} mph</p>
             </div>
             <div className="w-auto sm:w-47 rounded-2xl bg-[hsl(243,27%,20%)]  flex flex-col  justify-center px-3.5">
               <p>Precipitation</p>
-              <p>0 in</p>
+              <p>{weathernow.precipitation} in</p>
             </div>
           </div>
           <div className=" my-4 mt-8">Daily forecast</div>
