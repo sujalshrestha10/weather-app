@@ -8,7 +8,6 @@ export default function Body() {
   const [daysoption, setDaysoption] = useState(false);
   const [city, setCity] = useState("");
   const [weathernow, setWeathernow] = useState("");
-  const [weatherunit, setWeatherunit] = useState("");
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(async (position) => {
@@ -21,10 +20,23 @@ export default function Body() {
         );
         const data = await res.json();
         setWeathernow(data.current.temperature_2m);
-        
+
         console.log(data);
       }
       fetchweathernow();
+
+      async function geoCoding() {
+        const apiKey = "4bd382a7d77a4cccb9595f5ded72c267";
+        const getLocation = await fetch(
+          `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=${apiKey}`
+        );
+        const locationdata = await getLocation.json();
+        console.log(locationdata);
+
+        const place = locationdata.features[0].properties;
+        setCity(`${place.city},${place.country}`);
+      }
+      geoCoding();
     });
   }, []);
   return (
@@ -58,7 +70,7 @@ export default function Body() {
         <div className="mx-0 sm:mx-auto">
           <div className="rounded-2xl px-4 h-44 bg-no-repeat bg-cover items-center bg-center bg-[url('/images/bg-today-large.svg')]  flex justify-between ">
             <div className="">
-              <h2 className="font-bold text-2xl">Berlin, Germany</h2>
+              <h2 className="font-bold text-2xl">{city}</h2>
               <p className="opacity-60">Tuesday, Aug 5,2025</p>
             </div>
             <div className="flex justify-between gap-1 sm:gap-4 items-center  ">
@@ -69,7 +81,7 @@ export default function Body() {
                 width={50}
               />
               <h1 className="text-2xl sm:text-5xl mr-10 sm:mr-0 font-extrabold">
-                {weathernow} 
+                {weathernow}
               </h1>
             </div>
           </div>
