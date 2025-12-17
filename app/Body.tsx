@@ -14,6 +14,15 @@ export default function Body() {
     windSpeed: "",
     precipitation: "",
   });
+  type WeatherDay = {
+    date: string;
+    min: number;
+    max: number;
+    dayName: string;
+  };
+
+  const [weather_history, setWeather_history] = useState<WeatherDay[]>([]);
+
   const today = new Date();
   const dateString = today.toLocaleDateString("en-US", {
     month: "long",
@@ -22,6 +31,7 @@ export default function Body() {
   });
 
   console.log(dateString);
+  console.log(weather_history);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(async (position) => {
@@ -30,7 +40,7 @@ export default function Body() {
 
       async function fetchweathernow() {
         const res = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,apparent_temperature,precipitation`
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&past_days=7&forecast_days=1&daily=temperature_2m_min,temperature_2m_max&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,apparent_temperature,precipitation`
         );
         const data = await res.json();
         console.log(data);
@@ -41,8 +51,19 @@ export default function Body() {
           windSpeed: data.hourly.wind_speed_10m[0],
           precipitation: data.hourly.precipitation[0],
         });
+        setWeather_history(
+          data.daily.time.map((date: string, index: number) => ({
+            date: date,
+            min: data.temperature_2m_min[index],
+            max: data.temperature_2m_max[index],
+            dayName: new Date(date).toLocaleDateString("en-US", {
+              weekday: "long",
+            }),
+          }))
+        );
       }
       fetchweathernow();
+    
 
       async function geoCoding() {
         const apiKey = "4bd382a7d77a4cccb9595f5ded72c267";
@@ -123,9 +144,9 @@ export default function Body() {
             </div>
           </div>
           <div className=" my-4 mt-8">Daily forecast</div>
+
           <div className="flex items-center flex-wrap text-xs sm:text-lg justify-between overflow-x-auto  w-full gap-2">
             <div className="h-40 rounded-2xl  w-[30%] sm:w-25 bg-[hsl(243,27%,20%)] flex flex-col py-3.5 items-center">
-              <p>Tue</p>
               <Image
                 src="/images/icon-rain.webp"
                 height={50}
@@ -242,7 +263,6 @@ export default function Body() {
                     "Sunday",
                     "Monday",
                     "Tuesday",
-
                     "Wednesday",
                     "Thrusday",
                     "Friday",
