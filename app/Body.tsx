@@ -52,10 +52,10 @@ export default function Body() {
           precipitation: data.hourly.precipitation[0],
         });
         setWeather_history(
-          data.daily.time.map((date: string, index: number) => ({
+          data.daily.time.slice(1,3).map((date: string, index: number) => ({
             date: date,
-            min: data.temperature_2m_min[index],
-            max: data.temperature_2m_max[index],
+            min: data.daily.temperature_2m_min[index],
+            max: data.daily.temperature_2m_max[index],
             dayName: new Date(date).toLocaleDateString("en-US", {
               weekday: "long",
             }),
@@ -63,6 +63,7 @@ export default function Body() {
         );
       }
       fetchweathernow();
+      console.log(weather_history)
     
 
       async function geoCoding() {
