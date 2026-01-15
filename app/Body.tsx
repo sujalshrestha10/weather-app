@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-
+//factor
 import { useState, useEffect } from "react";
 
 export default function Body() {
