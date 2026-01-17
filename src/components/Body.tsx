@@ -1,82 +1,20 @@
 "use client";
 import Image from "next/image";
-import { WeatherDay, WeatherNow } from "../types/weather";
-import { location } from "../types/location";
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useGeolocation } from "../hooks/useGeolocation";
+import { useWeather } from "../hooks/useWeather";
 
 export default function Body() {
   const [thatday, setThatday] = useState("Tuesday");
   const [daysoption, setDaysoption] = useState(false);
-  const [city, setCity] = useState("");
-  const [coords, setCoords] = useState<location | null>(null);
-
-  const [weathernow, setWeathernow] = useState<WeatherNow>({
-    temp: "",
-    feelsLike: "",
-    humidity: "",
-    windSpeed: "",
-    precipitation: "",
-  });
-
-  const [weather_history, setWeather_history] = useState<WeatherDay[]>([]);
-
+  const geo = useGeolocation();
+  const weathernow = useWeather().weathernow;
   const today = new Date();
   const dateString = today.toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
   });
-
-  console.log(dateString);
-  console.log(weather_history);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-      setCoords({ lat, lon });
-      async function fetchweathernow() {
-        const res = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&past_days=7&forecast_days=1&daily=temperature_2m_min,temperature_2m_max&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,apparent_temperature,precipitation`
-        );
-        const data = await res.json();
-        console.log(data);
-        setWeathernow({
-          temp: data.current.temperature_2m,
-          feelsLike: data.hourly.apparent_temperature[0],
-          humidity: data.hourly.relative_humidity_2m[0],
-          windSpeed: data.hourly.wind_speed_10m[0],
-          precipitation: data.hourly.precipitation[0],
-        });
-        setWeather_history(
-          data.daily.time.slice(1, 3).map((date: string, index: number) => ({
-            date: date,
-            min: data.daily.temperature_2m_min[index],
-            max: data.daily.temperature_2m_max[index],
-            dayName: new Date(date).toLocaleDateString("en-US", {
-              weekday: "long",
-            }),
-          }))
-        );
-      }
-      fetchweathernow();
-      console.log(weather_history);
-
-      async function geoCoding() {
-        const apiKey = "4bd382a7d77a4cccb9595f5ded72c267";
-        const getLocation = await fetch(
-          `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=${apiKey}`
-        );
-        const locationdata = await getLocation.json();
-        console.log(locationdata);
-
-        const place = locationdata.features[0].properties;
-        setCity(`${place.city},${place.country}`);
-      }
-      geoCoding();
-    });
-  }, []);
   return (
     <>
       <div className="flex item-center justify-center text-center font-bold text-xl sm:text-3xl mt-16 ">
@@ -88,8 +26,7 @@ export default function Body() {
             className=" mx-auto  h-full w-full bg-[hsl(243,27%,20%)] rounded-md pl-9"
             type="text"
             placeholder="Search for a place.."
-            onChange={(e) => setCity(e.target.value)}
-            value={city}
+            value={geo.city}
           />
           <Image
             className="absolute left-3"
@@ -108,7 +45,7 @@ export default function Body() {
         <div className="mx-0 sm:mx-auto">
           <div className="rounded-2xl px-4 h-44 bg-no-repeat bg-cover items-center bg-center bg-[url('/images/bg-today-large.svg')]  flex justify-between ">
             <div className="">
-              <h2 className="font-bold text-2xl">{city}</h2>
+              <h2 className="font-bold text-2xl">{geo.city}</h2>
               <p className="opacity-60">{dateString}</p>
             </div>
             <div className="flex justify-between gap-1 sm:gap-4 items-center  ">
