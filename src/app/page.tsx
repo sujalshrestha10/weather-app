@@ -1,6 +1,6 @@
 import Body from "../components/Body";
-import Logo from "../components/ui/logo";
-import UnitsComponents from "../components/ui/units_button_components";
+import Logo from "../components/ui/nav/logo";
+import UnitsComponents from "../components/ui/nav/units_button_components";
 
 export default function Home() {
   return (
