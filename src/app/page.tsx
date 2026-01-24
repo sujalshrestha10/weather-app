@@ -1,6 +1,7 @@
 import Body from "../components/Body";
-import Logo from "../components/ui/nav/logo";
-import UnitsComponents from "../components/ui/nav/units_button_components";
+import Logo from "../components/ui/1nav/logo";
+import UnitsComponents from "../components/ui/1nav/units_button_components";
+import SearchInput from "../components/ui/2.searchingpart/SearchInput";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
             <Logo />
             <UnitsComponents />
           </div>
+          <SearchInput />
           <Body />
         </div>
       </main>
