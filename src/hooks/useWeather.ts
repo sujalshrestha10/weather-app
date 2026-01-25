@@ -22,7 +22,7 @@ export function useWeather() {
 
     async function fetchweathernow() {
       const res = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&past_days=7&forecast_days=1&daily=temperature_2m_min,temperature_2m_max&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,apparent_temperature,precipitation`
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&past_days=7&forecast_days=1&daily=temperature_2m_min,temperature_2m_max&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,apparent_temperature,precipitation`,
       );
       const data = await res.json();
       console.log(data);
@@ -41,10 +41,11 @@ export function useWeather() {
           dayName: new Date(date).toLocaleDateString("en-US", {
             weekday: "long",
           }),
-        }))
+        })),
       );
     }
     fetchweathernow();
+   
   }, [coord]);
   return { weathernow, weather_history };
 }
