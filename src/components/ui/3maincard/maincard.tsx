@@ -21,6 +21,12 @@ export default function Maincard() {
     { day: "Sun", icon: "snow", low: "68°", high: "75°" },
     { day: "Mon", icon: "fog", low: "68°", high: "75°" },
   ];
+  const weathersituation = [
+    { label: "feelslike", value: weathernow.feelsLike },
+    { label: "humidity", value: weathernow.humidity },
+    { label: "wind", value: weathernow.windSpeed },
+    { label: "precipitation", value: weathernow.precipitation },
+  ];
   return (
     <>
       <div className="mx-0 sm:mx-auto">
@@ -42,22 +48,15 @@ export default function Maincard() {
           </div>
         </div>
         <div className="h-25 flex flex-wrap sm:flex-wrap md:flex-wrap lg:flex:wrap xl:flex-nowrap gap-2  text-sm sm:text-xl  justify-between mt-4 ">
-          <div className="auto sm:w-47 bg-[hsl(243,27%,20%)] rounded-2xl flex flex-col  justify-center px-3.5">
-            <p>Feels Like</p>
-            <p>{weathernow.feelsLike}</p>
-          </div>
-          <div className="w-auto sm:w-47 rounded-2xl bg-[hsl(243,27%,20%)]  flex flex-col justify-center px-3.5">
-            <p>Humidity</p>
-            <p>{weathernow.humidity}%</p>
-          </div>
-          <div className="w-auto sm:w-47 rounded-2xl bg-[hsl(243,27%,20%)] flex flex-col justify-center px-3.5">
-            <p>wind</p>
-            <p>{weathernow.windSpeed} mph</p>
-          </div>
-          <div className="w-auto sm:w-47 rounded-2xl bg-[hsl(243,27%,20%)]  flex flex-col  justify-center px-3.5">
-            <p>Precipitation</p>
-            <p>{weathernow.precipitation} in</p>
-          </div>
+          {weathersituation.map((item, index) => (
+            <div
+              key={index}
+              className="auto sm:w-47 bg-[hsl(243,27%,20%)] rounded-2xl flex flex-col  justify-center px-3.5"
+            >
+              <p>{item.label}</p>
+              <p>{item.value}</p>
+            </div>
+          ))}
         </div>
         <div className=" my-4 mt-8">Daily forecast</div>
 
