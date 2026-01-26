@@ -6,27 +6,31 @@ import { useWeather } from "../../../hooks/useWeather";
 export default function Maincard() {
   const today = new Date();
   const geo = useGeolocation();
-  const weathernow = useWeather().weathernow;
+  const { weathernow, weather_history } = useWeather();
+
   const dateString = today.toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
   });
-  const forecastData = [
-    { day: "Tue", icon: "rain", low: "68°", high: "75°" },
-    { day: "Wed", icon: "drizzle", low: "68°", high: "75°" },
-    { day: "Thur", icon: "sunny", low: "68°", high: "75°" },
-    { day: "Fri", icon: "partly-cloudy", low: "68°", high: "75°" },
-    { day: "Sat", icon: "storm", low: "68°", high: "75°" },
-    { day: "Sun", icon: "snow", low: "68°", high: "75°" },
-    { day: "Mon", icon: "fog", low: "68°", high: "75°" },
-  ];
+
   const weathersituation = [
     { label: "feelslike", value: weathernow.feelsLike },
     { label: "humidity", value: weathernow.humidity },
     { label: "wind", value: weathernow.windSpeed },
     { label: "precipitation", value: weathernow.precipitation },
   ];
+
+  const mapWeatherCodeToText = (weather_code: number): string => {
+    if (!weather_code) return "sunny";
+    if ([0, 1].includes(weather_code)) return "sunny";
+    if ([2, 3].includes(weather_code)) return "partly-cloudy";
+    if ([45, 48].includes(weather_code)) return "overcast";
+    if ([51, 53, 55, 61, 63, 65].includes(weather_code)) return "rain";
+    if ([71, 73, 75].includes(weather_code)) return "snow";
+    if ([95, 96, 99].includes(weather_code)) return "storm";
+    return "cloudy";
+  };
   return (
     <>
       <div className="mx-0 sm:mx-auto">
@@ -61,21 +65,21 @@ export default function Maincard() {
         <div className=" my-4 mt-8">Daily forecast</div>
 
         <div className="flex items-center flex-wrap text-xs sm:text-lg justify-between overflow-x-auto  w-full gap-2">
-          {forecastData.map((item, index) => (
+          {weather_history.map((item, index) => (
             <div
               key={index}
               className="h-40 rounded-2xl  w-[30%] sm:w-25 bg-[hsl(243,27%,20%)] flex flex-col py-3.5 items-center"
             >
-              <p>{item.day}</p>
+              <p>{item.dayName}</p>
               <Image
-                src={`/images/icon-${item.icon}.webp`}
+                src={`/images/icon-${mapWeatherCodeToText(Number(weathernow.weather_code))}.webp`}
                 height={50}
                 width={50}
-                alt={item.icon}
+                alt="rain"
               />
               <div className="flex bg-[hsl(243,27%,20%)] justify-between gap-6 mt-4 mx-2.5">
-                <p>68°</p>
-                <p>75°</p>
+                <p>{item.min}</p>
+                <p>{item.max}</p>
               </div>
             </div>
           ))}

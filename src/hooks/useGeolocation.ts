@@ -16,7 +16,7 @@ export function useGeolocation() {
         `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=${apiKey}`
       );
       const locationdata = await getLocation.json();
-      console.log(locationdata);
+ 
 
       const place = locationdata.features[0].properties;
       setCity(`${place.city},${place.country}`);

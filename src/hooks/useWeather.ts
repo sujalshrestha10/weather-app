@@ -9,6 +9,7 @@ export function useWeather() {
     humidity: "",
     windSpeed: "",
     precipitation: "",
+    weather_code: "",
   });
 
   const [weather_history, setWeather_history] = useState<WeatherDay[]>([]);
@@ -22,8 +23,9 @@ export function useWeather() {
 
     async function fetchweathernow() {
       const res = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&past_days=7&forecast_days=1&daily=temperature_2m_min,temperature_2m_max&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,apparent_temperature,precipitation`,
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&past_days=6&forecast_days=1&daily=temperature_2m_min,temperature_2m_max,weathercode&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,apparent_temperature,precipitation`,
       );
+
       const data = await res.json();
       console.log(data);
       setWeathernow({
@@ -32,20 +34,21 @@ export function useWeather() {
         humidity: data.hourly.relative_humidity_2m[0],
         windSpeed: data.hourly.wind_speed_10m[0],
         precipitation: data.hourly.precipitation[0],
+        weather_code: data.hourly.weathercode,
       });
+
       setWeather_history(
-        data.daily.time.slice(1, 3).map((date: string, index: number) => ({
+        data.daily.time.slice(0, 7).map((date: string, index: number) => ({
           date: date,
           min: data.daily.temperature_2m_min[index],
           max: data.daily.temperature_2m_max[index],
           dayName: new Date(date).toLocaleDateString("en-US", {
-            weekday: "long",
+            weekday: "short",
           }),
         })),
       );
     }
     fetchweathernow();
-   
   }, [coord]);
   return { weathernow, weather_history };
 }
