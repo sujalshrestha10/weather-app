@@ -9,7 +9,6 @@ export function useWeather() {
     humidity: "",
     windSpeed: "",
     precipitation: "",
-    weather_code: "",
   });
 
   const [weather_history, setWeather_history] = useState<WeatherDay[]>([]);
@@ -23,18 +22,19 @@ export function useWeather() {
 
     async function fetchweathernow() {
       const res = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&past_days=6&forecast_days=1&daily=temperature_2m_min,temperature_2m_max,weathercode&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,apparent_temperature,precipitation`,
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&past_days=6&forecast_days=1&daily=temperature_2m_min,weathercode,temperature_2m_max&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,apparent_temperature,precipitation`,
       );
 
       const data = await res.json();
       console.log(data);
+      console.log(data.daily.weathercode);
+
       setWeathernow({
         temp: data.current.temperature_2m,
         feelsLike: data.hourly.apparent_temperature[0],
         humidity: data.hourly.relative_humidity_2m[0],
         windSpeed: data.hourly.wind_speed_10m[0],
         precipitation: data.hourly.precipitation[0],
-        weather_code: data.hourly.weathercode,
       });
 
       setWeather_history(
@@ -45,10 +45,12 @@ export function useWeather() {
           dayName: new Date(date).toLocaleDateString("en-US", {
             weekday: "short",
           }),
+          weather_code: data.daily.weathercode[index],
         })),
       );
     }
     fetchweathernow();
   }, [coord]);
+
   return { weathernow, weather_history };
 }

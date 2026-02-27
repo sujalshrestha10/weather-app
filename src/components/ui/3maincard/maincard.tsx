@@ -21,15 +21,15 @@ export default function Maincard() {
     { label: "precipitation", value: weathernow.precipitation },
   ];
 
-  const mapWeatherCodeToText = (weather_code: number): string => {
+  const mapWeatherCodeToText = (weather_code: number) => {
     if (!weather_code) return "sunny";
     if ([0, 1].includes(weather_code)) return "sunny";
     if ([2, 3].includes(weather_code)) return "partly-cloudy";
     if ([45, 48].includes(weather_code)) return "overcast";
-    if ([51, 53, 55, 61, 63, 65].includes(weather_code)) return "rain";
+    if ([51, 53, 55, 61, 63, 65,80,81,82].includes(weather_code)) return "rain";
     if ([71, 73, 75].includes(weather_code)) return "snow";
     if ([95, 96, 99].includes(weather_code)) return "storm";
-    return "cloudy";
+   
   };
   return (
     <>
@@ -51,7 +51,7 @@ export default function Maincard() {
             </h1>
           </div>
         </div>
-        <div className="h-25 flex flex-wrap sm:flex-wrap md:flex-wrap lg:flex:wrap xl:flex-nowrap gap-2  text-sm sm:text-xl  justify-between mt-4 ">
+        <div className="h-25 flex flex-wrap sm:flex-wrap md:flex-wrap lg:flex-wrap xl:flex-nowrap gap-2  text-sm sm:text-xl  justify-between mt-4 ">
           {weathersituation.map((item, index) => (
             <div
               key={index}
@@ -72,10 +72,10 @@ export default function Maincard() {
             >
               <p>{item.dayName}</p>
               <Image
-                src={`/images/icon-${mapWeatherCodeToText(Number(weathernow.weather_code))}.webp`}
+                src={`/images/icon-${mapWeatherCodeToText(Number(item.weather_code))}.webp`}
                 height={50}
                 width={50}
-                alt="rain"
+                alt="weather icon"
               />
               <div className="flex bg-[hsl(243,27%,20%)] justify-between gap-6 mt-4 mx-2.5">
                 <p>{item.min}</p>

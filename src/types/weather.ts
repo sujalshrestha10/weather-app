@@ -4,11 +4,11 @@ export type WeatherNow = {
   humidity: number | string;
   windSpeed: number | string;
   precipitation: number | string;
-  weather_code: number | string;
 };
 export type WeatherDay = {
   date: string;
   min: number;
   max: number;
   dayName: string;
+  weather_code: number | string;
 };
