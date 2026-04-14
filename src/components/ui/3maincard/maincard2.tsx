@@ -1,10 +1,17 @@
 "use client";
+import { useWeather } from "../../../hooks/useWeather";
 import Image from "next/image";
 import { useState } from "react";
 import Maincard from "./maincard";
+
 export default function Maincard2() {
   const [thatday, setThatday] = useState("Tuesday");
   const [daysoption, setDaysoption] = useState(false);
+  const hourlyweather = useWeather().hourlyweather;
+  console.log(hourlyweather);
+  const mapping_weathercode_to_image_next_card =
+    useWeather().mapWeatherCodeToText;
+
   return (
     <>
       <Maincard />
@@ -52,86 +59,23 @@ export default function Maincard2() {
             )}
           </div>
         </div>
-        <div className=" px-4 flex items-center rounded bg-[hsl(243,23%,30%)]">
-          <Image
-            src="/images/icon-overcast.webp"
-            alt="here"
-            height={30}
-            width={30}
-          />
-          <p>4 PM</p>
-          <p className="ml-auto ">69°</p>
-        </div>
-        <div className="flex px-4 items-center rounded bg-[hsl(243,23%,30%)]">
-          <Image
-            src="/images/icon-partly-cloudy.webp"
-            alt="here"
-            width={30}
-            height={30}
-          />
-          <p>4 PM</p>
-          <p className="ml-auto ">68°</p>
-        </div>
-        <div className="flex px-4 items-center rounded bg-[hsl(243,23%,30%)]">
-          <Image
-            src="/images/icon-rain.webp"
-            alt="here"
-            height={30}
-            width={30}
-          />
-          <p>4 PM</p>
-          <p className="ml-auto ">68°</p>
-        </div>
-        <div className="flex items-center px-4 rounded bg-[hsl(243,23%,30%)]">
-          <Image
-            src="/images/icon-snow.webp"
-            alt="here"
-            height={30}
-            width={30}
-          />
-          <p>4 PM</p>
-          <p className="ml-auto ">69°</p>
-        </div>
-        <div className="flex px-4 items-center rounded bg-[hsl(243,23%,30%)] ">
-          <Image
-            src="/images/icon-storm.webp"
-            alt="here"
-            height={30}
-            width={30}
-          />
-          <p>4 PM</p>
-          <p className="ml-auto ">70°</p>
-        </div>
-        <div className="flex px-4 items-center rounded bg-[hsl(243,23%,30%)] ">
-          <Image
-            src="/images/icon-sunny.webp"
-            alt="here"
-            height={30}
-            width={30}
-          />
-          <p>4 PM</p>
-          <p className="ml-auto ">68°</p>
-        </div>
-        <div className="flex px-4 items-center rounded bg-[hsl(243,23%,30%)] ">
-          <Image
-            src="/images/icon-rain.webp"
-            alt="here"
-            height={30}
-            width={30}
-          />
-          <p>4 PM</p>
-          <p className="ml-auto ">68°</p>
-        </div>
-        <div className="flex px-4 items-center rounded bg-[hsl(243,23%,30%)] ">
-          <Image
-            src="/images/icon-drizzle.webp"
-            alt="here"
-            height={30}
-            width={30}
-          />
-          <p>4 PM</p>
-          <p className="ml-auto ">68°</p>
-        </div>
+
+        {hourlyweather.map((value) => (
+          <div
+            key={value.time}
+            className="px-4 flex items-center rounded bg-[hsl(243,23%,30%)]"
+          >
+            <Image
+              src={`/images/icon-${mapping_weathercode_to_image_next_card(Number(value.weather_code))}.webp`} 
+             
+              alt="here"
+              height={30}
+              width={30}
+            />
+            <p>{value.timeunits}</p>
+            <p className="ml-auto ">{value.hourly_temp}</p>
+          </div>
+        ))}
       </div>
     </>
   );

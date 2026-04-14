@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+
 import { useGeolocation } from "../../../hooks/useGeolocation";
 import { useWeather } from "../../../hooks/useWeather";
 
@@ -7,12 +8,14 @@ export default function Maincard() {
   const today = new Date();
   const geo = useGeolocation();
   const { weathernow, weather_history } = useWeather();
+  const map_weathercode_to_image = useWeather().mapWeatherCodeToText;
 
   const dateString = today.toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
   });
+  console.log(weather_history);
 
   const weathersituation = [
     { label: "feelslike", value: weathernow.feelsLike },
@@ -21,16 +24,6 @@ export default function Maincard() {
     { label: "precipitation", value: weathernow.precipitation },
   ];
 
-  const mapWeatherCodeToText = (weather_code: number) => {
-    if (!weather_code) return "sunny";
-    if ([0, 1].includes(weather_code)) return "sunny";
-    if ([2, 3].includes(weather_code)) return "partly-cloudy";
-    if ([45, 48].includes(weather_code)) return "overcast";
-    if ([51, 53, 55, 61, 63, 65,80,81,82].includes(weather_code)) return "rain";
-    if ([71, 73, 75].includes(weather_code)) return "snow";
-    if ([95, 96, 99].includes(weather_code)) return "storm";
-   
-  };
   return (
     <>
       <div className="mx-0 sm:mx-auto">
@@ -72,7 +65,7 @@ export default function Maincard() {
             >
               <p>{item.dayName}</p>
               <Image
-                src={`/images/icon-${mapWeatherCodeToText(Number(item.weather_code))}.webp`}
+                src={`/images/icon-${map_weathercode_to_image(Number(item.weather_code))}.webp`}
                 height={50}
                 width={50}
                 alt="weather icon"
