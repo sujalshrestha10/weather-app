@@ -6,7 +6,7 @@ import { Bricolage_Grotesque } from "next/font/google";
 const brico = Bricolage_Grotesque({
   subsets: ["latin"],
   weight: ["200", "400", "500", "700"],
-});
+}); 
 
 export const metadata: Metadata = {
   title: "Create Next App",
